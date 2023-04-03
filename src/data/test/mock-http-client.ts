@@ -1,7 +1,7 @@
 import {
   HttpPostClient,
   HttpPostParams,
-} from 'data/protocols/http/http-post-client';
+} from '@/data/protocols/http/http-post-client';
 
 // Spy -> capture values to compare
 export class HttpPostClientSpy implements HttpPostClient {
