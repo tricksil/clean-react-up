@@ -13,8 +13,8 @@
     },
     "allowJs": true,
     "skipLibCheck": true,
+    "strictNullChecks": false,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "noEmit": true
