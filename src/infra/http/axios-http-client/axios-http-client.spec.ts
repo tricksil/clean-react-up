@@ -16,7 +16,7 @@ const mockPostRequest = (): HttpPostParams<any> => ({
 });
 
 describe('AxiosHttpCLient', () => {
-  test('Shoul call axios with correct values', async () => {
+  test('Should call axios with correct values', async () => {
     const request = mockPostRequest();
     const sut = makeSut();
     await sut.post(request);
