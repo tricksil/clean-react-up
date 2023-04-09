@@ -20,7 +20,7 @@
     "@typescript-eslint/return-await": "off",
     "@typescript-eslint/consistent-type-imports": "off",
     "@typescript-eslint/prefer-nullish-coalescing": "off",
-    "react/jsx-use-react": "error",
-    "react/jsx-use-vars": "error"
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error"
   }
 }
