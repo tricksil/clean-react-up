@@ -7,9 +7,15 @@ type Props = React.DetailedHTMLProps<
 >;
 
 const Input: React.FC<Props> = (props: Props) => {
+  const enableInput: React.FocusEventHandler<HTMLInputElement> = (
+    event: React.FocusEvent<HTMLInputElement, Element>
+  ): void => {
+    event.target.readOnly = false;
+  };
+
   return (
     <div className={Styles.inputWrap}>
-      <input {...props} />
+      <input readOnly {...props} onFocus={enableInput} />
       <span className={Styles.status}>🔴</span>
     </div>
   );
