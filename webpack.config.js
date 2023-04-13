@@ -48,7 +48,7 @@ module.exports = {
     devMiddleware: {
       writeToDisk: true,
     },
-    historyApiFallback: false,
+    historyApiFallback: true,
   },
   externals: {
     react: 'React',

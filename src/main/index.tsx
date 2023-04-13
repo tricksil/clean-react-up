@@ -1,5 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { Login } from '@/presentation/pages';
+import ReactDOM from 'react-dom/client';
+import { Router } from '@/presentation/components';
 
-ReactDOM.render(<Login />, document.getElementById('main'));
+const root = ReactDOM.createRoot(document.getElementById('main'));
+
+root.render(
+  <React.StrictMode>
+    <Router />
+  </React.StrictMode>
+);
