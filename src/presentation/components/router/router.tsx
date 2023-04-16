@@ -6,7 +6,11 @@ const Router: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route key={'login'} path="login" element={<Login />} />
+        <Route
+          key={'login'}
+          path="login"
+          element={<Login validation={undefined} authentication={undefined} />}
+        />
       </Routes>
     </BrowserRouter>
   );
