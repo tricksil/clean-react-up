@@ -9,7 +9,7 @@ import {
 import 'jest-localstorage-mock';
 import { faker } from '@faker-js/faker';
 
-import Login from './login';
+import { Login } from '@/presentation/pages';
 import { AuthenticationSpy, ValidationStub } from '@/presentation/test';
 import { InvalidCredentialsError } from '@/domain/errors';
 import { Router } from 'react-router-dom';
