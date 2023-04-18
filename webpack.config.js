@@ -1,4 +1,5 @@
 const path = require('path');
+const { DefinePlugin } = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
@@ -55,5 +56,10 @@ module.exports = {
     react: 'React',
     'react-dom': 'ReactDOM',
   },
-  plugins: [new CleanWebpackPlugin()],
+  plugins: [
+    new DefinePlugin({
+      'process.env.API_URL': JSON.stringify('http://localhost:5050/api'),
+    }),
+    new CleanWebpackPlugin(),
+  ],
 };
