@@ -15,6 +15,7 @@ module.exports = {
       '@': path.join(__dirname, 'src'),
     },
   },
+  devtool: 'source-map',
   module: {
     rules: [
       {
