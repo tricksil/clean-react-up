@@ -28,3 +28,8 @@ jobs:
       - run: npm ci
       - run: npx eslint 'src/**'
       - run: npm run test:coveralls
+      - name: Coveralls GitHub Action
+        uses: coverallsapp/github-action@v2.1.2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel: true
