@@ -27,9 +27,8 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npx eslint 'src/**'
-      - run: npm run test:coveralls
-      - name: Coveralls GitHub Action
-        uses: coverallsapp/github-action@v2.1.2
+      - run: npm run test:ci
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
         with:
-          github-token: ${{ secrets.TOKEN }}
-          parallel: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
