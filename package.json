@@ -9,7 +9,7 @@
     "test:watch": "npm test -- --watch",
     "test:staged": "npm test -- --findRelatedTests",
     "test:ci": "npm test -- --coverage",
-    "test:coveralls": "npm run test:ci && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "test:coveralls": "npm run test:ci && npx coveralls < coverage/lcov.info",
     "prepare": "husky install",
     "check": "npm-check -u -s"
   },
