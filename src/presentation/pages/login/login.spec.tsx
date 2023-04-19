@@ -1,4 +1,7 @@
 import React from 'react';
+import { Router } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
+import { faker } from '@faker-js/faker';
 import {
   RenderResult,
   render,
@@ -6,8 +9,6 @@ import {
   cleanup,
   waitFor,
 } from '@testing-library/react';
-import { faker } from '@faker-js/faker';
-
 import { Login } from '@/presentation/pages';
 import {
   AuthenticationSpy,
@@ -15,8 +16,6 @@ import {
   ValidationStub,
 } from '@/presentation/test';
 import { InvalidCredentialsError } from '@/domain/errors';
-import { Router } from 'react-router-dom';
-import { createMemoryHistory } from 'history';
 
 type SutTypes = {
   sut: RenderResult;
@@ -27,8 +26,8 @@ type SutTypes = {
 type SutParams = {
   validationError: string;
 };
-const history = createMemoryHistory({ initialEntries: ['/login'] });
 
+const history = createMemoryHistory({ initialEntries: ['/login'] });
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub();
   const authenticationSpy = new AuthenticationSpy();
@@ -51,7 +50,7 @@ const makeSut = (params?: SutParams): SutTypes => {
   };
 };
 
-const simulateValidSumbmit = async (
+const simulateValidSubmit = async (
   sut: RenderResult,
   email = faker.internet.email(),
   password = faker.internet.password()
@@ -168,7 +167,7 @@ describe('Login Component', () => {
 
   test('Should show spinner on submit', async () => {
     const { sut } = makeSut();
-    await simulateValidSumbmit(sut);
+    await simulateValidSubmit(sut);
     testElementExists(sut, 'spinner');
   });
 
@@ -176,21 +175,21 @@ describe('Login Component', () => {
     const { sut, authenticationSpy } = makeSut();
     const email = faker.internet.email();
     const password = faker.internet.password();
-    await simulateValidSumbmit(sut, email, password);
+    await simulateValidSubmit(sut, email, password);
     expect(authenticationSpy.params).toEqual({ email, password });
   });
 
   test('Should call Authentication only once', async () => {
     const { sut, authenticationSpy } = makeSut();
-    await simulateValidSumbmit(sut);
-    await simulateValidSumbmit(sut);
+    await simulateValidSubmit(sut);
+    await simulateValidSubmit(sut);
     expect(authenticationSpy.callsCount).toBe(1);
   });
 
   test('Should not call Authentication if form is invalid', async () => {
     const validationError = faker.random.words();
     const { sut, authenticationSpy } = makeSut({ validationError });
-    await simulateValidSumbmit(sut);
+    await simulateValidSubmit(sut);
     expect(authenticationSpy.callsCount).toBe(0);
   });
 
@@ -200,7 +199,7 @@ describe('Login Component', () => {
     jest
       .spyOn(authenticationSpy, 'auth')
       .mockReturnValueOnce(Promise.reject(error));
-    await simulateValidSumbmit(sut);
+    await simulateValidSubmit(sut);
     testElementText(sut, 'main-error', error.message);
     testErrorWrapChildCount(sut, 1);
   });
@@ -208,11 +207,24 @@ describe('Login Component', () => {
   test('Should call SaveAccessToken on success', async () => {
     const { sut, authenticationSpy, saveAccessTokenMock } = makeSut();
 
-    await simulateValidSumbmit(sut);
+    await simulateValidSubmit(sut);
     expect(saveAccessTokenMock.accessToken).toBe(
       authenticationSpy.account.accessToken
     );
     expect(history.location.pathname).toBe('/');
+  });
+
+  test('Should present error if SaveAccessToken fails', async () => {
+    const { sut, saveAccessTokenMock } = makeSut();
+    const error = new InvalidCredentialsError();
+    jest
+      .spyOn(saveAccessTokenMock, 'save')
+      .mockReturnValueOnce(Promise.reject(error));
+    await simulateValidSubmit(sut);
+    await waitFor(() => {
+      testElementText(sut, 'main-error', error.message);
+    });
+    testErrorWrapChildCount(sut, 1);
   });
 
   test('Should go to signup page', async () => {
