@@ -27,4 +27,4 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npx eslint 'src/**'
-      - run: npm run test:ci
+      - run: npm run test:coveralls
