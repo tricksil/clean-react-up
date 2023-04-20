@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import Styles from './signup-styles.scss';
 import {
   Footer,
@@ -10,7 +9,14 @@ import {
 import Context from '@/presentation/contexts/form/form-context';
 
 const SignUp: React.FC = () => {
-  const [state] = useState({});
+  const [state] = useState({
+    isLoading: false,
+    nameError: 'Campo obrigatório',
+    emailError: 'Campo obrigatório',
+    passwordError: 'Campo obrigatório',
+    passwordConfirmationError: 'Campo obrigatório',
+    mainError: '',
+  });
   return (
     <div className={Styles.signup}>
       <LoginHeader />
@@ -29,12 +35,15 @@ const SignUp: React.FC = () => {
             name="passwordConfirmation"
             placeholder="Repita sua senha"
           />
-          <button className={Styles.submit} type="submit">
+          <button
+            data-testid="submit"
+            disabled
+            className={Styles.submit}
+            type="submit"
+          >
             Entrar
           </button>
-          <Link to="/login" className={Styles.link}>
-            Voltar Para Login
-          </Link>
+          <span className={Styles.link}>Voltar Para Login</span>
           <FormStatus />
         </form>
       </Context.Provider>
