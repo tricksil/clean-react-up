@@ -1,4 +1,5 @@
 import {
+  CompareFieldsValidation,
   EmailValidation,
   MinLengthValidation,
   RequiredFieldValidation,
@@ -26,14 +27,31 @@ describe('ValidationBuilder', () => {
     expect(validations).toEqual([new MinLengthValidation(field, length)]);
   });
 
+  test('Should return CompareFieldsValidation', () => {
+    const field = faker.database.column();
+    const fieldToCompare = faker.database.column();
+    const validations = sut.field(field).sameAs(fieldToCompare).build();
+    expect(validations).toEqual([
+      new CompareFieldsValidation(field, fieldToCompare),
+    ]);
+  });
+
   test('Should return a list of Validations', () => {
     const field = faker.database.column();
+    const fieldToCompare = faker.database.column();
     const length = faker.datatype.number();
-    const validations = sut.field(field).required().min(length).email().build();
+    const validations = sut
+      .field(field)
+      .required()
+      .min(length)
+      .email()
+      .sameAs(fieldToCompare)
+      .build();
     expect(validations).toEqual([
       new RequiredFieldValidation(field),
       new MinLengthValidation(field, length),
       new EmailValidation(field),
+      new CompareFieldsValidation(field, fieldToCompare),
     ]);
   });
 });
