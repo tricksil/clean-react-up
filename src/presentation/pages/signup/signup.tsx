@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 import Styles from './signup-styles.scss';
 import {
@@ -119,7 +119,14 @@ const SignUp: React.FC<Props> = ({
           >
             Entrar
           </button>
-          <span className={Styles.link}>Voltar Para Login</span>
+          <Link
+            data-testid="login-link"
+            to="login"
+            replace
+            className={Styles.link}
+          >
+            Voltar Para Login
+          </Link>
           <FormStatus />
         </form>
       </Context.Provider>
