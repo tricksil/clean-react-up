@@ -127,4 +127,19 @@ describe('Login', () => {
       assert.isOk(window.localStorage.getItem('accessToken'))
     );
   });
+
+  it('Should present multiple submits', () => {
+    cy.intercept('POST', /login/, {
+      statusCode: 200,
+      delay: 5000,
+      body: {
+        accessToken: faker.datatype.uuid(),
+      },
+    }).as('request');
+    cy.getByTestId('email').focus().type(faker.internet.email());
+    cy.getByTestId('password').focus().type(faker.internet.password());
+    cy.getByTestId('submit').click();
+    cy.getByTestId('submit').click();
+    cy.get('@request.all').should('have.length', 1);
+  });
 });
