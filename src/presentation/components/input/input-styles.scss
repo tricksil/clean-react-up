@@ -5,6 +5,19 @@
   position: relative;
   border-bottom: 2px dashed $disabledColor;
 
+  &[data-status='valid'] {
+    border-bottom-color: $valid;
+    &::after {
+      background-color: $valid;
+    }
+  }
+  &[data-status='invalid'] {
+    border-bottom-color: $invalid;
+    &::after {
+      background-color: $invalid;
+    }
+  }
+
   &::after {
     content: '';
     width: 100%;
