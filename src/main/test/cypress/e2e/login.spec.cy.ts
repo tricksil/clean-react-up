@@ -95,8 +95,11 @@ describe('Login', () => {
     }).as('request');
 
     cy.getByTestId('email').focus().type(faker.internet.email());
-    cy.getByTestId('password').focus().type(faker.internet.password());
-    cy.getByTestId('submit').click();
+    cy.getByTestId('password')
+      .focus()
+      .type(faker.internet.password())
+      .type('{enter}');
+
     cy.getByTestId('spinner').should('not.exist');
 
     cy.getByTestId('main-error').should(
