@@ -85,4 +85,25 @@ describe('Login', () => {
 
     cy.url().should('eq', `${baseUrl}/login`);
   });
+
+  it('Should present UnexpectedError if invalid data is returned', () => {
+    cy.intercept('POST', /login/, {
+      statusCode: 200,
+      body: {
+        invalidProperty: faker.datatype.uuid(),
+      },
+    }).as('request');
+
+    cy.getByTestId('email').focus().type('mango@gmail.com');
+    cy.getByTestId('password').focus().type('12345');
+    cy.getByTestId('submit').click();
+    cy.getByTestId('spinner').should('not.exist');
+
+    cy.getByTestId('main-error').should(
+      'contain.text',
+      'Algo de errado aconteceu. Tente novamente em breve.'
+    );
+
+    cy.url().should('eq', `${baseUrl}/login`);
+  });
 });
