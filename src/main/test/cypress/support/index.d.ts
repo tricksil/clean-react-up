@@ -1,7 +1,7 @@
 declare global {
   namespace Cypress {
     interface Chainable {
-      getByTestId: (value: string) => Chainable<JQuery<HTMLElement>>;
+      getByTestId: (id: string) => Chainable<JQuery<HTMLElement>>;
     }
   }
 }
