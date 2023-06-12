@@ -14,3 +14,14 @@ export const mockInvalidData = (): void => {
     invalid: faker.datatype.uuid(),
   });
 };
+
+export const mockOk = (delay?: number): void => {
+  Helper.mockOk(
+    /signup/,
+    'POST',
+    {
+      accessToken: faker.datatype.uuid(),
+    },
+    delay
+  );
+};
