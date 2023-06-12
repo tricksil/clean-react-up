@@ -14,17 +14,26 @@ const makeSut = (fieldName: string): RenderResult => {
 
 describe('Input Component', () => {
   test('Should begin with readOnly', () => {
-    const fieldName = faker.database.column();
-    const sut = makeSut(fieldName);
-    const input = sut.getByTestId(fieldName) as HTMLInputElement;
+    const field = faker.database.column();
+    const sut = makeSut(field);
+    const input = sut.getByTestId(field) as HTMLInputElement;
     expect(input.readOnly).toBe(true);
   });
 
   test('Should remove readOnly on focus', () => {
-    const fieldName = faker.database.column();
-    const sut = makeSut(fieldName);
-    const input = sut.getByTestId(fieldName) as HTMLInputElement;
+    const field = faker.database.column();
+    const sut = makeSut(field);
+    const input = sut.getByTestId(field) as HTMLInputElement;
     fireEvent.focus(input);
     expect(input.readOnly).toBe(false);
+  });
+
+  test('Should focus input on label click', () => {
+    const field = faker.database.column();
+    const sut = makeSut(field);
+    const input = sut.getByTestId(field) as HTMLInputElement;
+    const label = sut.getByTestId(`${field}-label`);
+    fireEvent.click(label);
+    expect(document.activeElement).toBe(input);
   });
 });
