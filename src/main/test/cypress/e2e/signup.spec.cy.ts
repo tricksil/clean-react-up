@@ -2,12 +2,16 @@ import { faker } from '@faker-js/faker';
 import * as FormHelper from '../support/form-helper';
 import * as Http from '../support/signup-mocks';
 
-const simulateValidSubmit = (): void => {
+const populateFields = (): void => {
   cy.getByTestId('name').focus().type(faker.name.fullName());
   cy.getByTestId('email').focus().type(faker.internet.email());
   const password = faker.random.alphaNumeric(7);
   cy.getByTestId('password').focus().type(password);
   cy.getByTestId('passwordConfirmation').focus().type(password);
+};
+
+const simulateValidSubmit = (): void => {
+  populateFields();
   cy.getByTestId('submit').click();
 };
 
@@ -89,5 +93,13 @@ describe('SignUp', () => {
     cy.getByTestId('error-wrap').should('not.have.descendants');
     FormHelper.testUrl('/');
     FormHelper.testLocalStarageItem('accessToken');
+  });
+
+  it('Should present multiple submits', () => {
+    Http.mockOk(100);
+    populateFields();
+    cy.getByTestId('submit').click();
+    cy.getByTestId('submit').click();
+    FormHelper.testHttpCallsCount(1);
   });
 });
