@@ -1,10 +1,21 @@
 import { faker } from '@faker-js/faker';
 import {
+  HttpGetClient,
+  HttpGetParams,
   HttpPostClient,
   HttpPostParams,
   HttpResponse,
   HttpStatusCode,
 } from '@/data/protocols/http';
+
+export const mockPostRequest = (): HttpPostParams => ({
+  url: faker.internet.url(),
+  body: {
+    [faker.word.sample()]: faker.word.interjection(),
+    [faker.word.sample()]: faker.word.interjection(),
+    [faker.word.sample()]: faker.word.interjection(),
+  },
+});
 
 // Spy -> capture values to compare
 export class HttpPostClientSpy<R> implements HttpPostClient<R> {
@@ -21,11 +32,10 @@ export class HttpPostClientSpy<R> implements HttpPostClient<R> {
   }
 }
 
-export const mockPostRequest = (): HttpPostParams => ({
-  url: faker.internet.url(),
-  body: {
-    [faker.word.sample()]: faker.word.interjection(),
-    [faker.word.sample()]: faker.word.interjection(),
-    [faker.word.sample()]: faker.word.interjection(),
-  },
-});
+// Spy -> capture values to compare
+export class HttpGetClientSpy implements HttpGetClient {
+  url: string;
+  async get(params: HttpGetParams): Promise<void> {
+    this.url = params.url;
+  }
+}
