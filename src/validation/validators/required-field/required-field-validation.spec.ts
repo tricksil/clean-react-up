@@ -16,7 +16,7 @@ describe('RequiredFieldValidation', () => {
   test('Should return falsy if fields is not empty', () => {
     const field = faker.database.column();
     const sut = makeSut(field);
-    const error = sut.validate({ [field]: faker.random.word() });
+    const error = sut.validate({ [field]: faker.string.sample() });
     expect(error).toBeFalsy();
   });
 });

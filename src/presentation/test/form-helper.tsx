@@ -37,7 +37,7 @@ export const testStatusForField = (
 export const populateField = (
   sut: RenderResult,
   fieldName: string,
-  value = faker.random.word()
+  value = faker.word.sample()
 ): void => {
   const input = sut.getByTestId(fieldName);
   fireEvent.input(input, {

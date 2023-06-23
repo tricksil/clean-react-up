@@ -67,7 +67,7 @@ describe('Login Component', () => {
   afterEach(cleanup);
 
   test('Should start with initial state', () => {
-    const validationError = faker.random.words();
+    const validationError = faker.word.words();
     const { sut } = makeSut({ validationError });
     Helper.testChildCount(sut, 'error-wrap', 0);
     Helper.testButtonIsDisabled(sut, 'submit', true);
@@ -76,14 +76,14 @@ describe('Login Component', () => {
   });
 
   test('Should show email error if Validation fails', () => {
-    const validationError = faker.random.words();
+    const validationError = faker.word.words();
     const { sut } = makeSut({ validationError });
     Helper.populateField(sut, 'email');
     Helper.testStatusForField(sut, 'email', validationError);
   });
 
   test('Should show password error if Validation fails', () => {
-    const validationError = faker.random.words();
+    const validationError = faker.word.words();
     const { sut } = makeSut({ validationError });
     Helper.populateField(sut, 'password');
     Helper.testStatusForField(sut, 'password', validationError);
@@ -130,7 +130,7 @@ describe('Login Component', () => {
   });
 
   test('Should not call Authentication if form is invalid', async () => {
-    const validationError = faker.random.words();
+    const validationError = faker.word.words();
     const { sut, authenticationSpy } = makeSut({ validationError });
     await simulateValidSubmit(sut);
     expect(authenticationSpy.callsCount).toBe(0);

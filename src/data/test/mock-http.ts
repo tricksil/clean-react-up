@@ -23,5 +23,9 @@ export class HttpPostClientSpy<T, R> implements HttpPostClient<T, R> {
 
 export const mockPostRequest = (): HttpPostParams<any> => ({
   url: faker.internet.url(),
-  body: faker.datatype.json(),
+  body: {
+    [faker.word.sample()]: faker.word.interjection(),
+    [faker.word.sample()]: faker.word.interjection(),
+    [faker.word.sample()]: faker.word.interjection(),
+  },
 });

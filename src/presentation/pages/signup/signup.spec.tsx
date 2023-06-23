@@ -52,7 +52,7 @@ const makeSut = (params?: SutParams): SutTypes => {
 
 const simulateValidSubmit = async (
   sut: RenderResult,
-  name = faker.name.firstName(),
+  name = faker.person.firstName(),
   email = faker.internet.email(),
   password = faker.internet.password()
 ): Promise<void> => {
@@ -68,7 +68,7 @@ const simulateValidSubmit = async (
 describe('SignUp Component', () => {
   afterEach(cleanup);
   test('Should start with initial state', () => {
-    const validationError = faker.random.words();
+    const validationError = faker.word.words();
     const { sut } = makeSut({ validationError });
     Helper.testChildCount(sut, 'error-wrap', 0);
     Helper.testButtonIsDisabled(sut, 'submit', true);
@@ -79,28 +79,28 @@ describe('SignUp Component', () => {
   });
 
   test('Should show name error if Validation fails', () => {
-    const validationError = faker.random.words();
+    const validationError = faker.word.words();
     const { sut } = makeSut({ validationError });
     Helper.populateField(sut, 'name');
     Helper.testStatusForField(sut, 'name', validationError);
   });
 
   test('Should show email error if Validation fails', () => {
-    const validationError = faker.random.words();
+    const validationError = faker.word.words();
     const { sut } = makeSut({ validationError });
     Helper.populateField(sut, 'email');
     Helper.testStatusForField(sut, 'email', validationError);
   });
 
   test('Should show password error if Validation fails', () => {
-    const validationError = faker.random.words();
+    const validationError = faker.word.words();
     const { sut } = makeSut({ validationError });
     Helper.populateField(sut, 'password');
     Helper.testStatusForField(sut, 'password', validationError);
   });
 
   test('Should show passwordConfirmation error if Validation fails', () => {
-    const validationError = faker.random.words();
+    const validationError = faker.word.words();
     const { sut } = makeSut({ validationError });
     Helper.populateField(sut, 'passwordConfirmation');
     Helper.testStatusForField(sut, 'passwordConfirmation', validationError);
@@ -147,7 +147,7 @@ describe('SignUp Component', () => {
 
   test('Should call AddAccount with correct values', async () => {
     const { sut, addAccountSpy } = makeSut();
-    const name = faker.name.fullName();
+    const name = faker.person.fullName();
     const email = faker.internet.email();
     const password = faker.internet.password();
     await simulateValidSubmit(sut, name, email, password);
@@ -167,7 +167,7 @@ describe('SignUp Component', () => {
   });
 
   test('Should not call Authentication if form is invalid', async () => {
-    const validationError = faker.random.words();
+    const validationError = faker.word.words();
     const { sut, addAccountSpy } = makeSut({ validationError });
     await simulateValidSubmit(sut);
     expect(addAccountSpy.callsCount).toBe(0);
