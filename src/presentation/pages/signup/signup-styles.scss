@@ -3,7 +3,7 @@
 .signupWrap {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
   justify-content: space-between;
 
   .form {
@@ -37,6 +37,24 @@
       &:hover {
         text-decoration: underline;
       }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .signupWrap {
+    .form {
+      max-width: 400px;
+      width: 90%;
+    }
+  }
+}
+@media only screen and (max-width: 380px) {
+  .signupWrap {
+    .form {
+      max-width: 400px;
+      width: 100%;
+      border-radius: 0px;
     }
   }
 }
