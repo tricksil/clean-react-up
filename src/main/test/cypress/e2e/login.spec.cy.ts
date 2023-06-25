@@ -69,12 +69,12 @@ describe('Login', () => {
     FormHelper.testUrl('/login');
   });
 
-  it('Should present save accessToken if valid credentials are provided', () => {
+  it('Should present save account if valid credentials are provided', () => {
     Http.mockOk(100);
     simulateValidSubmit();
     cy.getByTestId('error-wrap').should('not.have.descendants');
     FormHelper.testUrl('/');
-    FormHelper.testLocalStarageItem('accessToken');
+    FormHelper.testLocalStarageItem('account');
   });
 
   it('Should present multiple submits', () => {

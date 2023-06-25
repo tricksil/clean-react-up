@@ -11,7 +11,7 @@ export const mockUnexpectedError = (): void => {
 
 export const mockInvalidData = (): void => {
   Helper.mockOk(/signup/, 'POST', {
-    invalid: faker.datatype.uuid(),
+    invalid: faker.string.uuid(),
   });
 };
 
@@ -20,7 +20,8 @@ export const mockOk = (delay?: number): void => {
     /signup/,
     'POST',
     {
-      accessToken: faker.datatype.uuid(),
+      accessToken: faker.string.uuid(),
+      name: faker.person.firstName(),
     },
     delay
   );

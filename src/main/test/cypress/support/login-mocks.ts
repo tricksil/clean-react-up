@@ -12,13 +12,14 @@ export const mockOk = (delay?: number): void => {
     /login/,
     'POST',
     {
-      accessToken: faker.datatype.uuid(),
+      accessToken: faker.string.uuid(),
+      name: faker.person.firstName(),
     },
     delay
   );
 };
 export const mockInvalidData = (): void => {
   Helper.mockOk(/login/, 'POST', {
-    invalid: faker.datatype.uuid(),
+    invalid: faker.string.uuid(),
   });
 };
