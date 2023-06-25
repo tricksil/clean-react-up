@@ -8,6 +8,7 @@ import { makeLogin } from '@/main/factories/pages/login/login-factory';
 import { makeSignUp } from '@/main/factories/pages/signup/signup-factory';
 import { ApiContext } from '@/presentation/contexts';
 import { SurveyList } from '@/presentation/pages';
+import { PrivateRoute } from '@/presentation/components';
 
 const Router: React.FC = () => {
   return (
@@ -19,9 +20,11 @@ const Router: React.FC = () => {
     >
       <BrowserRouter>
         <Routes>
-          <Route key="login" path="login" Component={makeLogin} />
-          <Route key="signup" path="signup" Component={makeSignUp} />
-          <Route key="/" path="/" Component={SurveyList} />
+          <Route path="login" Component={makeLogin} />
+          <Route path="signup" Component={makeSignUp} />
+          <Route path="/" element={<PrivateRoute />}>
+            <Route path="/" Component={SurveyList} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </ApiContext.Provider>
