@@ -1,8 +1,14 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
+import { ApiContext } from '@/presentation/contexts';
 
 const PrivateRoute: React.FC = () => {
-  return <Navigate replace to="/login" />;
+  const { getCurrentAccount } = useContext(ApiContext);
+  return getCurrentAccount()?.accessToken ? (
+    <Outlet />
+  ) : (
+    <Navigate replace to="/login" />
+  );
 };
 
 export default PrivateRoute;
