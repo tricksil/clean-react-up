@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 import Styles from './signup-styles.scss';
@@ -9,21 +9,18 @@ import {
   LoginHeader,
   SubmitButton,
 } from '@/presentation/components';
-import Context from '@/presentation/contexts/form/form-context';
+import { ApiContext, FormContext } from '@/presentation/contexts';
 import { Validation } from '@/presentation/protocols/validation';
-import { AddAccount, UpdateCurrentAccount } from '@/domain/usecases';
+import { AddAccount } from '@/domain/usecases';
 
 type Props = {
   validation: Validation;
   addAccount: AddAccount;
-  updateCurrentAccount: UpdateCurrentAccount;
 };
 
-const SignUp: React.FC<Props> = ({
-  validation,
-  addAccount,
-  updateCurrentAccount,
-}: Props) => {
+const SignUp: React.FC<Props> = ({ validation, addAccount }: Props) => {
+  const { setCurrentAccount } = useContext(ApiContext);
+  const navigate = useNavigate();
   const [state, setState] = useState({
     isLoading: false,
     isFormInvalid: true,
@@ -37,7 +34,6 @@ const SignUp: React.FC<Props> = ({
     passwordConfirmationError: '',
     mainError: '',
   });
-  const navigate = useNavigate();
 
   useEffect(() => {
     const { name, email, password, passwordConfirmation } = state;
@@ -80,7 +76,7 @@ const SignUp: React.FC<Props> = ({
         password: state.password,
         passwordConfirmation: state.passwordConfirmation,
       });
-      await updateCurrentAccount.save(account);
+      setCurrentAccount(account);
       navigate('/', { replace: true });
     } catch (error) {
       setState({
@@ -94,7 +90,7 @@ const SignUp: React.FC<Props> = ({
   return (
     <div className={Styles.signupWrap}>
       <LoginHeader />
-      <Context.Provider value={{ state, setState }}>
+      <FormContext.Provider value={{ state, setState }}>
         <form
           data-testid="form"
           className={Styles.form}
@@ -124,7 +120,7 @@ const SignUp: React.FC<Props> = ({
           </Link>
           <FormStatus />
         </form>
-      </Context.Provider>
+      </FormContext.Provider>
       <Footer />
     </div>
   );
