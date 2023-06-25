@@ -92,7 +92,7 @@ const SignUp: React.FC<Props> = ({
   };
 
   return (
-    <div className={Styles.signup}>
+    <div className={Styles.signupWrap}>
       <LoginHeader />
       <Context.Provider value={{ state, setState }}>
         <form
