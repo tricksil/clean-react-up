@@ -17,7 +17,7 @@ export const mockSurveyModel = (): SurveyModel => ({
   didAnswer: faker.datatype.boolean(),
 });
 
-export const mockSurveyList = (): SurveyModel[] => [
+export const mockSurveyListModel = (): SurveyModel[] => [
   mockSurveyModel(),
   mockSurveyModel(),
   mockSurveyModel(),
