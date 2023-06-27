@@ -1,23 +1,14 @@
 import { faker } from '@faker-js/faker';
-import { SurveyModel } from '@/domain/models';
+import { LoadSurveyList } from '@/domain/usecases';
 
-export const mockSurveyModel = (): SurveyModel => ({
+export const mockSurveyModel = (): LoadSurveyList.Model => ({
   id: faker.string.uuid(),
   question: faker.word.words(10),
-  answers: [
-    {
-      answer: faker.word.words(4),
-      image: faker.internet.url(),
-    },
-    {
-      answer: faker.word.words(4),
-    },
-  ],
   date: faker.date.recent(),
   didAnswer: faker.datatype.boolean(),
 });
 
-export const mockSurveyListModel = (): SurveyModel[] => [
+export const mockSurveyListModel = (): LoadSurveyList.Model[] => [
   mockSurveyModel(),
   mockSurveyModel(),
   mockSurveyModel(),

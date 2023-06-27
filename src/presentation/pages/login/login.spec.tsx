@@ -1,17 +1,18 @@
-import React from 'react';
-import { Router } from 'react-router-dom';
-import { createMemoryHistory } from 'history';
-import { faker } from '@faker-js/faker';
-import { ApiContext } from '@/presentation/contexts';
-import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import { Login } from '@/presentation/pages';
-import { AuthenticationSpy, ValidationStub, Helper } from '@/presentation/test';
+import { ApiContext } from '@/presentation/contexts';
+import { ValidationStub, Helper } from '@/presentation/test';
+import { Authentication } from '@/domain/usecases';
 import { InvalidCredentialsError } from '@/domain/errors';
-import { AccountModel } from '@/domain/models';
+import { AuthenticationSpy } from '@/domain/test';
+import { faker } from '@faker-js/faker';
+import { createMemoryHistory } from 'history';
+import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+import { Router } from 'react-router-dom';
+import React from 'react';
 
 type SutTypes = {
   authenticationSpy: AuthenticationSpy;
-  setCurrentAccountMock: (account: AccountModel) => void;
+  setCurrentAccountMock: (account: Authentication.Model) => void;
 };
 
 type SutParams = {

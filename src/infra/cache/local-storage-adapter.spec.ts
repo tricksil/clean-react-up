@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 import 'jest-localstorage-mock';
 import { LocalStorageAdapter } from './local-storage-adapter';
-import { mockAccountModel } from '@/domain/test';
+import { objectElement } from '@/data/test';
 
 const makeSut = (): LocalStorageAdapter => new LocalStorageAdapter();
 
@@ -13,7 +13,7 @@ describe('LocalStorageAdapter', () => {
   test('Should call localStorage.setItem with correct values', () => {
     const sut = makeSut();
     const key = faker.database.column();
-    const value = mockAccountModel();
+    const value = objectElement;
     sut.set(key, value);
     expect(localStorage.setItem).toHaveBeenCalledWith(
       key,
@@ -24,7 +24,7 @@ describe('LocalStorageAdapter', () => {
   test('Should call localStorage.getItem with correct values', () => {
     const sut = makeSut();
     const key = faker.database.column();
-    const value = mockAccountModel();
+    const value = objectElement;
     const getItemSpy = jest
       .spyOn(localStorage, 'getItem')
       .mockReturnValueOnce(JSON.stringify(value));

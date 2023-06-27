@@ -1,17 +1,18 @@
-import React from 'react';
-import { Router } from 'react-router-dom';
-import { createMemoryHistory } from 'history';
-import { render, fireEvent, waitFor, screen } from '@testing-library/react';
-import { faker } from '@faker-js/faker';
-import SignUp from './signup';
-import { AddAccountSpy, Helper, ValidationStub } from '@/presentation/test';
+import { SignUp } from '@/presentation/pages';
+import { ApiContext } from '@/presentation/contexts';
+import { Helper, ValidationStub } from '@/presentation/test';
 import { EmailInUseError } from '@/domain/errors';
-import ApiContext from '@/presentation/contexts/api/api-context';
-import { AccountModel } from '@/domain/models';
+import { AddAccountSpy } from '@/domain/test';
+import { AddAccount } from '@/domain/usecases';
+import { faker } from '@faker-js/faker';
+import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
+import { Router } from 'react-router-dom';
+import React from 'react';
 
 type SutTypes = {
   addAccountSpy: AddAccountSpy;
-  setCurrentAccountMock: (account: AccountModel) => void;
+  setCurrentAccountMock: (account: AddAccount.Model) => void;
 };
 
 type SutParams = {
