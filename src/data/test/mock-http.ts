@@ -8,17 +8,20 @@ import {
   HttpStatusCode,
 } from '@/data/protocols/http';
 
+const objectElement = {
+  [faker.word.sample()]: faker.word.interjection(),
+  [faker.word.sample()]: faker.word.interjection(),
+  [faker.word.sample()]: faker.word.interjection(),
+};
+
 export const mockPostRequest = (): HttpPostParams => ({
   url: faker.internet.url(),
-  body: {
-    [faker.word.sample()]: faker.word.interjection(),
-    [faker.word.sample()]: faker.word.interjection(),
-    [faker.word.sample()]: faker.word.interjection(),
-  },
+  body: objectElement,
 });
 
 export const mockGetRequest = (): HttpGetParams => ({
   url: faker.internet.url(),
+  headers: objectElement,
 });
 
 // Spy -> capture values to compare
