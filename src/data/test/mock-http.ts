@@ -8,7 +8,7 @@ import {
   HttpStatusCode,
 } from '@/data/protocols/http';
 
-const objectElement = {
+export const objectElement = {
   [faker.word.sample()]: faker.word.interjection(),
   [faker.word.sample()]: faker.word.interjection(),
   [faker.word.sample()]: faker.word.interjection(),
