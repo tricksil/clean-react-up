@@ -1,6 +1,5 @@
-import { RemoteAddAccount } from '@/data/usecases/add-account/remote-add-account';
-import { makeAxiosHttpClient } from '@/main/factories/http/axios-http-client-factory';
-import { makeApiUrl } from '@/main/factories/http/api-url-factory';
+import { RemoteAddAccount } from '@/data/usecases';
+import { makeAxiosHttpClient, makeApiUrl } from '@/main/factories/http';
 import { AddAccount } from '@/domain/usecases';
 
 export const makeRemoteAddAccount = (): AddAccount => {

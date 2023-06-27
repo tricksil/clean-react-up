@@ -1,14 +1,12 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { makeLogin, makeSignUp, makeSurveyList } from '@/main/factories/pages';
 import {
   getCurrentAccountAdapter,
   setCurrentAccountAdapter,
 } from '@/main/adapters/current-account-adapter';
-import { makeLogin } from '@/main/factories/pages/login/login-factory';
-import { makeSignUp } from '@/main/factories/pages/signup/signup-factory';
 import { ApiContext } from '@/presentation/contexts';
-import { SurveyList } from '@/presentation/pages';
 import { PrivateRoute } from '@/presentation/components';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React from 'react';
 
 const Router: React.FC = () => {
   return (
@@ -23,7 +21,7 @@ const Router: React.FC = () => {
           <Route path="login" Component={makeLogin} />
           <Route path="signup" Component={makeSignUp} />
           <Route path="/" element={<PrivateRoute />}>
-            <Route path="/" Component={SurveyList} />
+            <Route path="/" Component={makeSurveyList} />
           </Route>
         </Routes>
       </BrowserRouter>
