@@ -71,10 +71,16 @@ describe('AuthorizeHttpGetClientDecorator', () => {
     };
     await sut.get(httpRequest);
     expect(httpGetClientSpy.url).toBe(httpRequest.url);
-
     expect(httpGetClientSpy.headers).toEqual({
       field,
       'x-access-token': getStorageSpy.value.accessToken,
     });
+  });
+
+  test('Should return the same result as HttpGetClient', async () => {
+    const { sut, httpGetClientSpy } = makeSut();
+
+    const httpResponse = await sut.get(mockGetRequest());
+    expect(httpResponse).toBe(httpGetClientSpy.response);
   });
 });
