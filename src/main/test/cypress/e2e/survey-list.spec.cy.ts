@@ -13,10 +13,14 @@ describe('SurveyList', () => {
 
   it('Should present error on UnexpectedError', () => {
     Http.mockUnexpectedError();
-
     cy.getByTestId('error').should(
       'contain.text',
       'Algo de errado aconteceu. Tente novamente em breve.'
     );
+  });
+
+  it('Should logout on AccessDeniedError', () => {
+    Http.mockAccessDeniedError();
+    Helpers.testUrl('/login');
   });
 });
