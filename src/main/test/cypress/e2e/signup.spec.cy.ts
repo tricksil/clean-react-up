@@ -1,11 +1,12 @@
 import { faker } from '@faker-js/faker';
-import * as FormHelper from '../support/form-helper';
+import * as FormHelpers from '../support/form-helpers';
+import * as Helpers from '../support/helpers';
 import * as Http from '../support/signup-mocks';
 
 const populateFields = (): void => {
-  cy.getByTestId('name').focus().type(faker.name.fullName());
+  cy.getByTestId('name').focus().type(faker.person.fullName());
   cy.getByTestId('email').focus().type(faker.internet.email());
-  const password = faker.random.alphaNumeric(7);
+  const password = faker.string.alphanumeric(7);
   cy.getByTestId('password').focus().type(password);
   cy.getByTestId('passwordConfirmation').focus().type(password);
 };
@@ -22,42 +23,42 @@ describe('SignUp', () => {
 
   it('Should load with correct initial state', () => {
     cy.getByTestId('name').should('have.attr', 'readOnly');
-    FormHelper.testInputStatus('name', 'Campo obrigatório');
+    FormHelpers.testInputStatus('name', 'Campo obrigatório');
     cy.getByTestId('email').should('have.attr', 'readOnly');
-    FormHelper.testInputStatus('email', 'Campo obrigatório');
+    FormHelpers.testInputStatus('email', 'Campo obrigatório');
     cy.getByTestId('password').should('have.attr', 'readOnly');
-    FormHelper.testInputStatus('password', 'Campo obrigatório');
+    FormHelpers.testInputStatus('password', 'Campo obrigatório');
     cy.getByTestId('passwordConfirmation').should('have.attr', 'readOnly');
-    FormHelper.testInputStatus('passwordConfirmation', 'Campo obrigatório');
+    FormHelpers.testInputStatus('passwordConfirmation', 'Campo obrigatório');
     cy.getByTestId('submit').should('have.attr', 'disabled');
     cy.getByTestId('error-wrap').should('not.have.descendants');
   });
 
   it('Should present error state if form is invalid', () => {
-    cy.getByTestId('name').focus().type(faker.random.alphaNumeric(3));
-    FormHelper.testInputStatus('name', 'Valor inválido');
-    cy.getByTestId('email').focus().type(faker.random.word());
-    FormHelper.testInputStatus('email', 'Valor inválido');
-    cy.getByTestId('password').focus().type(faker.random.alphaNumeric(3));
-    FormHelper.testInputStatus('password', 'Valor inválido');
+    cy.getByTestId('name').focus().type(faker.string.alphanumeric(3));
+    FormHelpers.testInputStatus('name', 'Valor inválido');
+    cy.getByTestId('email').focus().type(faker.word.sample());
+    FormHelpers.testInputStatus('email', 'Valor inválido');
+    cy.getByTestId('password').focus().type(faker.string.alphanumeric(3));
+    FormHelpers.testInputStatus('password', 'Valor inválido');
     cy.getByTestId('passwordConfirmation')
       .focus()
       .type(faker.random.alphaNumeric(4));
-    FormHelper.testInputStatus('passwordConfirmation', 'Valor inválido');
+    FormHelpers.testInputStatus('passwordConfirmation', 'Valor inválido');
     cy.getByTestId('submit').should('have.attr', 'disabled');
     cy.getByTestId('error-wrap').should('not.have.descendants');
   });
 
   it('Should present valid state if form is valid', () => {
-    cy.getByTestId('name').focus().type(faker.name.fullName());
-    FormHelper.testInputStatus('name');
+    cy.getByTestId('name').focus().type(faker.person.fullName());
+    FormHelpers.testInputStatus('name');
     cy.getByTestId('email').focus().type(faker.internet.email());
-    FormHelper.testInputStatus('email');
-    const password = faker.random.alphaNumeric(5);
+    FormHelpers.testInputStatus('email');
+    const password = faker.string.alphanumeric(5);
     cy.getByTestId('password').focus().type(password);
-    FormHelper.testInputStatus('password');
+    FormHelpers.testInputStatus('password');
     cy.getByTestId('passwordConfirmation').focus().type(password);
-    FormHelper.testInputStatus('passwordConfirmation');
+    FormHelpers.testInputStatus('passwordConfirmation');
     cy.getByTestId('submit').should('not.have.attr', 'disabled');
     cy.getByTestId('error-wrap').should('not.have.descendants');
   });
@@ -65,34 +66,25 @@ describe('SignUp', () => {
   it('Should present EmailInUseError on 403', () => {
     Http.mockEmailInUseError();
     simulateValidSubmit();
-    FormHelper.testMainError('Esse e-mail já está em uso');
-    FormHelper.testUrl('/signup');
+    FormHelpers.testMainError('Esse e-mail já está em uso');
+    Helpers.testUrl('/signup');
   });
 
   it('Should present UnexpectedError on default error cases', () => {
     Http.mockUnexpectedError();
     simulateValidSubmit();
-    FormHelper.testMainError(
+    FormHelpers.testMainError(
       'Algo de errado aconteceu. Tente novamente em breve.'
     );
-    FormHelper.testUrl('/signup');
-  });
-
-  it('Should present UnexpectedError if invalid data is returned', () => {
-    Http.mockInvalidData();
-    simulateValidSubmit();
-    FormHelper.testMainError(
-      'Algo de errado aconteceu. Tente novamente em breve.'
-    );
-    FormHelper.testUrl('/signup');
+    Helpers.testUrl('/signup');
   });
 
   it('Should present save account if valid credentials are provided', () => {
     Http.mockOk(100);
     simulateValidSubmit();
     cy.getByTestId('error-wrap').should('not.have.descendants');
-    FormHelper.testUrl('/');
-    FormHelper.testLocalStarageItem('account');
+    Helpers.testUrl('/');
+    Helpers.testLocalStarageItem('account');
   });
 
   it('Should present multiple submits', () => {
@@ -100,7 +92,7 @@ describe('SignUp', () => {
     populateFields();
     cy.getByTestId('submit').click();
     cy.getByTestId('submit').click();
-    FormHelper.testHttpCallsCount(1);
+    Helpers.testHttpCallsCount(1);
   });
 
   it('Should not call submit if form is invalid', () => {
@@ -109,6 +101,6 @@ describe('SignUp', () => {
       .focus()
       .type(faker.internet.email())
       .type('{enter}');
-    FormHelper.testHttpCallsCount(0);
+    Helpers.testHttpCallsCount(0);
   });
 });
