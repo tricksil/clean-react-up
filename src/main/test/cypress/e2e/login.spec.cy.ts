@@ -28,9 +28,9 @@ describe('Login', () => {
   });
 
   it('Should present error state if form is invalid', () => {
-    cy.getByTestId('email').focus().type(faker.random.word());
+    cy.getByTestId('email').focus().type(faker.word.sample());
     FormHelpers.testInputStatus('email', 'Valor inválido');
-    cy.getByTestId('password').focus().type(faker.random.alphaNumeric(3));
+    cy.getByTestId('password').focus().type(faker.string.alphanumeric(3));
     FormHelpers.testInputStatus('password', 'Valor inválido');
     cy.getByTestId('submit').should('have.attr', 'disabled');
     cy.getByTestId('error-wrap').should('not.have.descendants');
@@ -39,7 +39,7 @@ describe('Login', () => {
   it('Should present valid state if form is valid', () => {
     cy.getByTestId('email').focus().type(faker.internet.email());
     FormHelpers.testInputStatus('email');
-    cy.getByTestId('password').focus().type(faker.random.alphaNumeric(5));
+    cy.getByTestId('password').focus().type(faker.string.alphanumeric(5));
     FormHelpers.testInputStatus('password');
     cy.getByTestId('submit').should('not.have.attr', 'disabled');
     cy.getByTestId('error-wrap').should('not.have.descendants');
