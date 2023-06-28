@@ -6,7 +6,7 @@ import React, { memo, useContext } from 'react';
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
-  const { setCurrentAccount } = useContext(ApiContext);
+  const { setCurrentAccount, getCurrentAccount } = useContext(ApiContext);
 
   const logout = (event: React.MouseEvent<HTMLAnchorElement>): void => {
     event.preventDefault();
@@ -19,7 +19,7 @@ const Header: React.FC = () => {
         <Logo />
 
         <div className={Styles.logoutWrap}>
-          <span>Patrick</span>
+          <span data-testid="username">{getCurrentAccount().name}</span>
           <a onClick={logout} data-testid="logout" href="#">
             Sair
           </a>
