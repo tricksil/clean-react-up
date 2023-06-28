@@ -23,4 +23,10 @@ describe('SurveyList', () => {
     Http.mockAccessDeniedError();
     Helpers.testUrl('/login');
   });
+
+  it('Should present correct username', () => {
+    Http.mockUnexpectedError();
+    const { name } = Helpers.getLocalStorageItem('account');
+    cy.getByTestId('username').should('contain.text', name);
+  });
 });
