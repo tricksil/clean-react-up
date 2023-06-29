@@ -21,9 +21,9 @@ describe('MinLengthValidation', () => {
   });
 
   test('Should return falsy field does not exists in schema', () => {
-    const sut = makeSut(faker.database.column());
+    const sut = makeSut('any_field');
     const error = sut.validate({
-      [faker.database.column()]: faker.string.alphanumeric(5),
+      invalid_field: faker.string.alphanumeric(5),
     });
     expect(error).toBeFalsy();
   });
