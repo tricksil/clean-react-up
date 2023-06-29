@@ -40,7 +40,7 @@ type MockOkType = {
   url: RegExp;
   method: string;
   body?: any;
-  fixture?: any;
+  fixture?: string;
   delay?: number;
 };
 
