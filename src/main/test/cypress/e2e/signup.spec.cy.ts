@@ -1,7 +1,20 @@
+import * as FormHelpers from '../utils/form-helpers';
+import * as Helpers from '../utils/helpers';
+import * as Http from '../utils/http-mocks';
 import { faker } from '@faker-js/faker';
-import * as FormHelpers from '../support/form-helpers';
-import * as Helpers from '../support/helpers';
-import * as Http from '../support/signup-mocks';
+
+const path = /signup/;
+const mockEmailInUseError = (): void => {
+  Http.mockForbiddenError(path, 'POST');
+};
+
+const mockUnexpectedError = (): void => {
+  Http.mockServerError(path, 'POST');
+};
+
+const mockSuccess = (delay?: number): void => {
+  Http.mockOk({ url: path, method: 'POST', fixture: 'account', delay });
+};
 
 const populateFields = (): void => {
   cy.getByTestId('name').focus().type(faker.person.fullName());
@@ -43,7 +56,7 @@ describe('SignUp', () => {
     FormHelpers.testInputStatus('password', 'Valor inválido');
     cy.getByTestId('passwordConfirmation')
       .focus()
-      .type(faker.random.alphaNumeric(4));
+      .type(faker.string.alphanumeric(4));
     FormHelpers.testInputStatus('passwordConfirmation', 'Valor inválido');
     cy.getByTestId('submit').should('have.attr', 'disabled');
     cy.getByTestId('error-wrap').should('not.have.descendants');
@@ -64,14 +77,14 @@ describe('SignUp', () => {
   });
 
   it('Should present EmailInUseError on 403', () => {
-    Http.mockEmailInUseError();
+    mockEmailInUseError();
     simulateValidSubmit();
     FormHelpers.testMainError('Esse e-mail já está em uso');
     Helpers.testUrl('/signup');
   });
 
   it('Should present UnexpectedError on default error cases', () => {
-    Http.mockUnexpectedError();
+    mockUnexpectedError();
     simulateValidSubmit();
     FormHelpers.testMainError(
       'Algo de errado aconteceu. Tente novamente em breve.'
@@ -80,7 +93,7 @@ describe('SignUp', () => {
   });
 
   it('Should present save account if valid credentials are provided', () => {
-    Http.mockOk(100);
+    mockSuccess(100);
     simulateValidSubmit();
     cy.getByTestId('error-wrap').should('not.have.descendants');
     Helpers.testUrl('/');
@@ -88,7 +101,7 @@ describe('SignUp', () => {
   });
 
   it('Should present multiple submits', () => {
-    Http.mockOk(100);
+    mockSuccess(100);
     populateFields();
     cy.getByTestId('submit').click();
     cy.getByTestId('submit').click();
@@ -96,7 +109,7 @@ describe('SignUp', () => {
   });
 
   it('Should not call submit if form is invalid', () => {
-    Http.mockOk();
+    mockSuccess();
     cy.getByTestId('email')
       .focus()
       .type(faker.internet.email())

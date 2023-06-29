@@ -36,18 +36,29 @@ export const mockServerError = (url: RegExp, method: string): void => {
   ).as('request');
 };
 
-export const mockOk = (
-  url: RegExp,
-  method: string,
-  body: any,
-  delay?: number
-): void => {
+type MockOkType = {
+  url: RegExp;
+  method: string;
+  body?: any;
+  fixture?: any;
+  delay?: number;
+};
+
+export const mockOk = ({
+  url,
+  method,
+  body,
+  fixture,
+  delay,
+}: MockOkType): void => {
+  console.log('body', body);
   cy.intercept(
     { method, url },
     {
       delay,
       statusCode: 200,
       body,
+      fixture,
     }
   ).as('request');
 };
