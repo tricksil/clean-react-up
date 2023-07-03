@@ -4,6 +4,25 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const common = require('./webpack.common');
 const { merge } = require('webpack-merge');
 
+const externals = [
+  {
+    module: 'react',
+    global: 'React',
+  },
+  {
+    module: 'react-dom',
+    global: 'ReactDOM',
+  },
+  {
+    module: 'axios',
+    global: 'axios',
+  },
+  {
+    module: 'react-router-dom',
+    global: 'ReactRouterDOM',
+  },
+];
+
 module.exports = merge(common, {
   mode: 'production',
   devtool: 'source-map',
@@ -33,10 +52,7 @@ module.exports = merge(common, {
       },
     ],
   },
-  externals: {
-    react: 'React',
-    'react-dom': 'ReactDOM',
-  },
+  externals,
   plugins: [
     new DefinePlugin({
       'process.env.API_URL': JSON.stringify('http://localhost:5050/api'),
