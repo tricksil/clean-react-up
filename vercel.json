@@ -1,0 +1,7 @@
+{
+  "github": {
+    "enabled": false,
+    "silent": true
+  },
+  "outputDirectory": "dist"
+}
