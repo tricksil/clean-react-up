@@ -63,7 +63,7 @@ describe('SurveyList', () => {
   });
 
   it('Should present survey items', () => {
-    mockSuccess();
+    mockSuccess(100);
     cy.visit('');
     cy.get('li:empty').should('have.length', 4);
     cy.get('li:not(:empty)').should('have.length', 2);
