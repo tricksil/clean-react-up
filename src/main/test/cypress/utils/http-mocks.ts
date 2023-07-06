@@ -14,7 +14,7 @@ export const mockUnauthorizedError = (url: RegExp): void => {
 
 export const mockForbiddenError = (url: RegExp, method: string): void => {
   cy.intercept(
-    { method: 'POST', url },
+    { method, url },
     {
       statusCode: 403,
       body: {
