@@ -36,6 +36,11 @@ jobs:
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Cypress run
+        uses: cypress-io/github-action@v5
+        with:
+          start: npm run dev:base
+          wait-on: 'http://localhost:8080'
   production:
     runs-on: ubuntu-latest
     needs: build

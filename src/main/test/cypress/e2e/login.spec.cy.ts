@@ -85,6 +85,7 @@ describe('Login', () => {
     populateFields();
     cy.getByTestId('submit').click();
     cy.getByTestId('submit').click();
+    cy.wait('@request');
     Helpers.testHttpCallsCount(1);
   });
 
