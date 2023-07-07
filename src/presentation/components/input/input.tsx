@@ -29,7 +29,7 @@ const Input: React.FC<Props> = (props: Props) => {
           e.target.readOnly = false;
         }}
         onChange={(e) => {
-          setState({ ...state, [e.target.name]: e.target.value });
+          setState((old) => ({ ...old, [e.target.name]: e.target.value }));
         }}
       />
       <label
