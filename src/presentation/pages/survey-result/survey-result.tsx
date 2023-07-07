@@ -1,5 +1,5 @@
 import Styles from './survey-result-styles.scss';
-import { Footer, Header, Loading } from '@/presentation/components';
+import { Calendar, Footer, Header, Loading } from '@/presentation/components';
 import { Flipped, Flipper } from 'react-flip-toolkit';
 import React from 'react';
 
@@ -8,7 +8,10 @@ const SurveyResult: React.FC = () => {
     <div className={Styles.surveyResultWrap}>
       <Header />
       <div className={Styles.contentWrap}>
-        <h2>Qual é seu framework web favorito?</h2>
+        <hgroup>
+          <Calendar date={new Date()} className={Styles.calendarWrap} />
+          <h2>Qual é seu framework web favorito?</h2>
+        </hgroup>
         <Flipper flipKey="answers">
           <ul className={Styles.answerList}>
             <Flipped flipId="ReactJS">
