@@ -1,5 +1,5 @@
 import Styles from './survey-result-styles.scss';
-import { Footer, Header, Spinner } from '@/presentation/components';
+import { Footer, Header, Loading } from '@/presentation/components';
 import { Flipped, Flipper } from 'react-flip-toolkit';
 import React from 'react';
 
@@ -21,13 +21,8 @@ const SurveyResult: React.FC = () => {
           </ul>
         </Flipper>
         <button>Voltar</button>
-        <div className={Styles.loadingWrap}>
-          <div className={Styles.loading}>
-            <span>Aguarde...</span>
-            <Spinner isNegative={true} />
-          </div>
-        </div>
       </div>
+      {false && <Loading />}
       <Footer />
     </div>
   );

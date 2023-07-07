@@ -5,6 +5,7 @@ import {
 } from '@/main/adapters/current-account-adapter';
 import { ApiContext } from '@/presentation/contexts';
 import { PrivateRoute } from '@/presentation/components';
+import { SurveyResult } from '@/presentation/pages';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import React from 'react';
 
@@ -20,8 +21,11 @@ const Router: React.FC = () => {
         <Routes>
           <Route path="login" Component={makeLogin} />
           <Route path="signup" Component={makeSignUp} />
-          <Route path="/" element={<PrivateRoute />}>
+          <Route element={<PrivateRoute />}>
             <Route path="/" Component={makeSurveyList} />
+          </Route>
+          <Route element={<PrivateRoute />}>
+            <Route path="/surveys" Component={SurveyResult} />
           </Route>
         </Routes>
       </BrowserRouter>
