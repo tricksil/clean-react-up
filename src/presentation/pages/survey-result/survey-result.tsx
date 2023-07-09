@@ -6,16 +6,25 @@ import {
   Header,
   Loading,
 } from '@/presentation/components';
-import { Flipped, Flipper } from 'react-flip-toolkit';
-import React, { useState } from 'react';
 import { LoadSurveyResult } from '@/domain/usecases';
+import { Flipped, Flipper } from 'react-flip-toolkit';
+import React, { useEffect, useState } from 'react';
 
-const SurveyResult: React.FC = () => {
+type Props = {
+  loadSurveyResult: LoadSurveyResult;
+};
+
+const SurveyResult: React.FC<Props> = ({ loadSurveyResult }: Props) => {
   const [state] = useState({
     isLoading: false,
     error: '',
     surveyResult: null as LoadSurveyResult.Model,
   });
+
+  useEffect(() => {
+    loadSurveyResult.load().then().catch();
+  }, []);
+
   return (
     <div className={Styles.surveyResultWrap}>
       <Header />
