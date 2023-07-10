@@ -6,6 +6,7 @@ import {
   Header,
   Loading,
 } from '@/presentation/components';
+import { useErrorHandler } from '@/presentation/hooks';
 import { LoadSurveyResult } from '@/domain/usecases';
 import { Flipped, Flipper } from 'react-flip-toolkit';
 import React, { useEffect, useState } from 'react';
@@ -15,6 +16,9 @@ type Props = {
 };
 
 const SurveyResult: React.FC<Props> = ({ loadSurveyResult }: Props) => {
+  const handleError = useErrorHandler((error: Error) => {
+    setState((old) => ({ ...old, surveyResult: null, error: error.message }));
+  });
   const [state, setState] = useState({
     isLoading: false,
     error: '',
@@ -30,7 +34,7 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }: Props) => {
           surveyResult,
         }));
       })
-      .catch();
+      .catch(handleError);
   }, []);
 
   return (
