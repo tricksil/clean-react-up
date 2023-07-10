@@ -5,6 +5,7 @@ import {
   mockAccountModel,
   mockSurveyResultModel,
 } from '@/domain/test';
+import { UnexpectedError } from '@/domain/errors';
 import { createMemoryHistory } from 'history';
 import { Router } from 'react-router-dom';
 import { render, screen, waitFor } from '@testing-library/react';
@@ -14,10 +15,8 @@ type SutTypes = {
   loadSurveyResultSpy: LoadSurveyResultSpy;
 };
 
-const makeSut = (surveyResult = mockSurveyResultModel()): SutTypes => {
+const makeSut = (loadSurveyResultSpy = new LoadSurveyResultSpy()): SutTypes => {
   const history = createMemoryHistory();
-  const loadSurveyResultSpy = new LoadSurveyResultSpy();
-  loadSurveyResultSpy.surveyResult = surveyResult;
   render(
     <ApiContext.Provider
       value={{
@@ -53,11 +52,12 @@ describe('SurveyResult', () => {
   });
 
   test('Should present SurveyResult data on Success', async () => {
+    const loadSurveyListSpy = new LoadSurveyResultSpy();
     const surveyResult = Object.assign(mockSurveyResultModel(), {
       date: new Date('2022-05-03T00:00:00'),
     });
-
-    makeSut(surveyResult);
+    loadSurveyListSpy.surveyResult = surveyResult;
+    makeSut(loadSurveyListSpy);
     await waitFor(() => screen.getByTestId('survey-result'));
     expect(screen.getByTestId('day')).toHaveTextContent('03');
     expect(screen.getByTestId('month')).toHaveTextContent('mai');
@@ -87,5 +87,16 @@ describe('SurveyResult', () => {
     expect(percents[1]).toHaveTextContent(
       `${surveyResult.answers[1].percent}%`
     );
+  });
+
+  test('Should render error on UnexpectedError', async () => {
+    const loadSurveyResultSpy = new LoadSurveyResultSpy();
+    const error = new UnexpectedError();
+    jest.spyOn(loadSurveyResultSpy, 'load').mockRejectedValueOnce(error);
+    makeSut(loadSurveyResultSpy);
+    await waitFor(() => screen.getByTestId('error'));
+    expect(screen.queryByTestId('question')).not.toBeInTheDocument();
+    expect(screen.getByTestId('error')).toHaveTextContent(error.message);
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
   });
 });
