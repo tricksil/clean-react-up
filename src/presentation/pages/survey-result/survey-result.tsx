@@ -15,14 +15,22 @@ type Props = {
 };
 
 const SurveyResult: React.FC<Props> = ({ loadSurveyResult }: Props) => {
-  const [state] = useState({
+  const [state, setState] = useState({
     isLoading: false,
     error: '',
     surveyResult: null as LoadSurveyResult.Model,
   });
 
   useEffect(() => {
-    loadSurveyResult.load().then().catch();
+    loadSurveyResult
+      .load()
+      .then((surveyResult) => {
+        setState((old) => ({
+          ...old,
+          surveyResult,
+        }));
+      })
+      .catch();
   }, []);
 
   return (
@@ -32,35 +40,38 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }: Props) => {
         {state.surveyResult && (
           <>
             <hgroup>
-              <Calendar date={new Date()} className={Styles.calendarWrap} />
-              <h2>
-                Qual é seu framework web favorito? Qual é seu framework web
-                favorito?
-              </h2>
+              <Calendar
+                date={state.surveyResult.date}
+                className={Styles.calendarWrap}
+              />
+              <h2 data-testid="question">{state.surveyResult.question}</h2>
             </hgroup>
             <Flipper flipKey="answers">
-              <ul className={Styles.answerList}>
-                <Flipped flipId="ReactJS">
-                  <li className={Styles.active}>
-                    <img src="https://ionicframework.com/docs/icons/logo-react-icon.png" />
-                    <span className={Styles.answer}>ReactJS</span>
-                    <span className={Styles.percent}>50%</span>
-                  </li>
-                </Flipped>
-                <Flipped flipId="ReactJS">
-                  <li>
-                    <img src="https://ionicframework.com/docs/icons/logo-react-icon.png" />
-                    <span className={Styles.answer}>ReactJS</span>
-                    <span className={Styles.percent}>50%</span>
-                  </li>
-                </Flipped>
-                <Flipped flipId="ReactJS">
-                  <li>
-                    <img src="https://ionicframework.com/docs/icons/logo-react-icon.png" />
-                    <span className={Styles.answer}>ReactJS</span>
-                    <span className={Styles.percent}>50%</span>
-                  </li>
-                </Flipped>
+              <ul data-testid="answers" className={Styles.answerList}>
+                {state.surveyResult.answers.map((answer) => (
+                  <Flipped key={answer.answer} flipId={answer.answer}>
+                    <li
+                      data-testid="answer-wrap"
+                      className={
+                        answer.isCurrentAccountAnswer ? Styles.active : ''
+                      }
+                    >
+                      {answer.image && (
+                        <img
+                          data-testid="image"
+                          src={answer.image}
+                          alt={answer.answer}
+                        />
+                      )}
+                      <span data-testid="answer" className={Styles.answer}>
+                        {answer.answer}
+                      </span>
+                      <span data-testid="percent" className={Styles.percent}>
+                        {answer.percent}%
+                      </span>
+                    </li>
+                  </Flipped>
+                ))}
               </ul>
             </Flipper>
             <button>Voltar</button>
