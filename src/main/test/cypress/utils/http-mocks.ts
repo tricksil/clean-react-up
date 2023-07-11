@@ -51,7 +51,6 @@ export const mockOk = ({
   fixture,
   delay,
 }: MockOkType): void => {
-  console.log('body', body);
   cy.intercept(
     { method, url },
     {
