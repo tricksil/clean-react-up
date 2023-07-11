@@ -10,6 +10,7 @@ import { useErrorHandler } from '@/presentation/hooks';
 import { LoadSurveyResult } from '@/domain/usecases';
 import { Flipped, Flipper } from 'react-flip-toolkit';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
   loadSurveyResult: LoadSurveyResult;
@@ -29,7 +30,6 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }: Props) => {
     surveyResult: null as LoadSurveyResult.Model,
     reload: false,
   });
-
   const reload = (): void => {
     setState((old) => ({
       isLoading: false,
@@ -38,6 +38,7 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }: Props) => {
       reload: !old.reload,
     }));
   };
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadSurveyResult
@@ -92,7 +93,14 @@ const SurveyResult: React.FC<Props> = ({ loadSurveyResult }: Props) => {
                 ))}
               </ul>
             </Flipper>
-            <button>Voltar</button>
+            <button
+              data-testid="back-button"
+              onClick={() => {
+                navigate(-1);
+              }}
+            >
+              Voltar
+            </button>
           </>
         )}
       </div>
