@@ -19,10 +19,10 @@ describe('SurveyResult', () => {
     cy.fixture('account').then((account) => {
       Helpers.setLocalStorageItem('account', account);
     });
-    cy.visit('/surveys/any_id');
   });
 
   it('Should present error on UnexpectedError', () => {
+    cy.visit('/surveys/any_id');
     mockUnexpectedError();
     cy.getByTestId('error').should(
       'contain.text',
@@ -31,6 +31,7 @@ describe('SurveyResult', () => {
   });
 
   it('Should reload on button click', () => {
+    cy.visit('/surveys/any_id');
     mockUnexpectedError();
     cy.getByTestId('error').should(
       'contain.text',
@@ -42,11 +43,13 @@ describe('SurveyResult', () => {
   });
 
   it('Should logout on AccessDeniedError', () => {
+    cy.visit('/surveys/any_id');
     mockAccessDeniedError();
     Helpers.testUrl('/login');
   });
 
   it('Should present survey items', () => {
+    cy.visit('/surveys/any_id');
     mockSuccess(100);
     cy.getByTestId('question').should('have.text', 'Qual o seu nome?');
     cy.getByTestId('day').should('have.text', '28');
@@ -62,5 +65,13 @@ describe('SurveyResult', () => {
       assert.notExists(li.find('[data-testid="image"]'));
       assert.equal(li.find('[data-testid="percent"]').text(), '30%');
     });
+  });
+
+  it('Should goto SurveyList on back button click', () => {
+    cy.visit('');
+    cy.visit('/surveys/any_id');
+    mockSuccess();
+    cy.getByTestId('back-button').click();
+    Helpers.testUrl('/');
   });
 });
