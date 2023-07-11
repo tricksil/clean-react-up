@@ -7,13 +7,11 @@ export const mockHttpResponse = (): any => ({
     [faker.word.sample()]: faker.word.interjection(),
     [faker.word.sample()]: faker.word.interjection(),
   },
-  status: faker.string.numeric(),
+  status: faker.number.int(),
 });
 
 export const mockAxios = (): jest.Mocked<typeof axios> => {
   const mockedAxios = axios as jest.Mocked<typeof axios>;
-  mockedAxios.post.mockClear().mockResolvedValue(mockHttpResponse());
-  mockedAxios.get.mockClear().mockResolvedValue(mockHttpResponse());
-
+  mockedAxios.request.mockClear().mockResolvedValue(mockHttpResponse());
   return mockedAxios;
 };
