@@ -1,0 +1,20 @@
+{
+  "question": "Qual o seu nome?",
+  "date": "2023-06-28T08:51:16.869Z",
+  "answers": [
+    {
+      "image": "any_image",
+      "answer": "any_answer",
+      "count": 2,
+      "percent": 70,
+      "isCurrentAccountAnswer": true
+    },
+    {
+      "image": "any_image",
+      "answer": "other_answer",
+      "count": 1,
+      "percent": 30,
+      "isCurrentAccountAnswer": false
+    }
+  ]
+}
