@@ -1,9 +1,10 @@
 import Styles from './result-styles.scss';
 import { Calendar } from '@/presentation/components';
-import { Flipped, Flipper } from 'react-flip-toolkit';
+import { SurveyResultAnswer } from '@/presentation/pages/survey-result/components';
+import { LoadSurveyResult } from '@/domain/usecases';
+import { Flipper } from 'react-flip-toolkit';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
-import { LoadSurveyResult } from '@/domain/usecases';
 
 type Props = {
   surveyResult: LoadSurveyResult.Model;
@@ -20,26 +21,7 @@ const Result: React.FC<Props> = ({ surveyResult }: Props) => {
       <Flipper flipKey="answers">
         <ul data-testid="answers" className={Styles.answerList}>
           {surveyResult.answers.map((answer) => (
-            <Flipped key={answer.answer} flipId={answer.answer}>
-              <li
-                data-testid="answer-wrap"
-                className={answer.isCurrentAccountAnswer ? Styles.active : ''}
-              >
-                {answer.image && (
-                  <img
-                    data-testid="image"
-                    src={answer.image}
-                    alt={answer.answer}
-                  />
-                )}
-                <span data-testid="answer" className={Styles.answer}>
-                  {answer.answer}
-                </span>
-                <span data-testid="percent" className={Styles.percent}>
-                  {answer.percent}%
-                </span>
-              </li>
-            </Flipped>
+            <SurveyResultAnswer key={answer.answer} answer={answer} />
           ))}
         </ul>
       </Flipper>
