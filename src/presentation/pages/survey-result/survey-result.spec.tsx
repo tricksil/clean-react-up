@@ -2,6 +2,7 @@ import { SurveyResult } from '@/presentation/pages';
 import { ApiContext } from '@/presentation/contexts';
 import {
   LoadSurveyResultSpy,
+  SaveSurveyResultSpy,
   mockAccountModel,
   mockSurveyResultModel,
 } from '@/domain/test';
@@ -14,11 +15,20 @@ import React from 'react';
 
 type SutTypes = {
   loadSurveyResultSpy: LoadSurveyResultSpy;
+  saveSurveyResultSpy: SaveSurveyResultSpy;
   history: MemoryHistory;
   setCurrentAccountMock: (account: AccountModel) => void;
 };
 
-const makeSut = (loadSurveyResultSpy = new LoadSurveyResultSpy()): SutTypes => {
+type SutParams = {
+  loadSurveyResultSpy?: LoadSurveyResultSpy;
+  saveSurveyResultSpy?: SaveSurveyResultSpy;
+};
+
+const makeSut = ({
+  loadSurveyResultSpy = new LoadSurveyResultSpy(),
+  saveSurveyResultSpy = new SaveSurveyResultSpy(),
+}: SutParams = {}): SutTypes => {
   const history = createMemoryHistory({
     initialEntries: ['/', `/surveys/any_id`],
     initialIndex: 1,
@@ -32,13 +42,17 @@ const makeSut = (loadSurveyResultSpy = new LoadSurveyResultSpy()): SutTypes => {
       }}
     >
       <Router location={history.location} navigator={history}>
-        <SurveyResult loadSurveyResult={loadSurveyResultSpy} />
+        <SurveyResult
+          loadSurveyResult={loadSurveyResultSpy}
+          saveSurveyResult={saveSurveyResultSpy}
+        />
       </Router>
     </ApiContext.Provider>
   );
 
   return {
     loadSurveyResultSpy,
+    saveSurveyResultSpy,
     history,
     setCurrentAccountMock,
   };
@@ -61,12 +75,12 @@ describe('SurveyResult', () => {
   });
 
   test('Should present SurveyResult data on Success', async () => {
-    const loadSurveyListSpy = new LoadSurveyResultSpy();
+    const loadSurveyResultSpy = new LoadSurveyResultSpy();
     const surveyResult = Object.assign(mockSurveyResultModel(), {
       date: new Date('2022-05-03T00:00:00'),
     });
-    loadSurveyListSpy.surveyResult = surveyResult;
-    makeSut(loadSurveyListSpy);
+    loadSurveyResultSpy.surveyResult = surveyResult;
+    makeSut({ loadSurveyResultSpy });
     await waitFor(() => screen.getByTestId('survey-result'));
     expect(screen.getByTestId('day')).toHaveTextContent('03');
     expect(screen.getByTestId('month')).toHaveTextContent('mai');
@@ -102,7 +116,7 @@ describe('SurveyResult', () => {
     const loadSurveyResultSpy = new LoadSurveyResultSpy();
     const error = new UnexpectedError();
     jest.spyOn(loadSurveyResultSpy, 'load').mockRejectedValueOnce(error);
-    makeSut(loadSurveyResultSpy);
+    makeSut({ loadSurveyResultSpy });
     await waitFor(() => screen.getByTestId('error'));
     expect(screen.queryByTestId('question')).not.toBeInTheDocument();
     expect(screen.getByTestId('error')).toHaveTextContent(error.message);
@@ -114,7 +128,7 @@ describe('SurveyResult', () => {
     jest
       .spyOn(loadSurveyResultSpy, 'load')
       .mockRejectedValueOnce(new AccessDeniedError());
-    const { setCurrentAccountMock, history } = makeSut(loadSurveyResultSpy);
+    const { setCurrentAccountMock, history } = makeSut({ loadSurveyResultSpy });
     await waitFor(() => screen.queryByTestId('survey-result'));
 
     expect(setCurrentAccountMock).toHaveBeenCalledWith(undefined);
@@ -126,7 +140,7 @@ describe('SurveyResult', () => {
     jest
       .spyOn(loadSurveyResultSpy, 'load')
       .mockRejectedValueOnce(new UnexpectedError());
-    makeSut(loadSurveyResultSpy);
+    makeSut({ loadSurveyResultSpy });
     await waitFor(() => screen.getByTestId('error'));
     fireEvent.click(screen.getByTestId('reload'));
     expect(loadSurveyResultSpy.callsCount).toBe(1);
@@ -146,5 +160,17 @@ describe('SurveyResult', () => {
     const answersWrap = screen.queryAllByTestId('answer-wrap');
     fireEvent.click(answersWrap[0]);
     expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
+  });
+
+  test('Should call SaveSurveyResult on non active answer click', async () => {
+    const { saveSurveyResultSpy, loadSurveyResultSpy } = makeSut();
+    await waitFor(() => screen.getByTestId('survey-result'));
+    const answersWrap = screen.queryAllByTestId('answer-wrap');
+    fireEvent.click(answersWrap[1]);
+    expect(screen.queryByTestId('loading')).toBeInTheDocument();
+    expect(saveSurveyResultSpy.params).toEqual({
+      answer: loadSurveyResultSpy.surveyResult.answers[1].answer,
+    });
+    await waitFor(() => screen.getByTestId('survey-result'));
   });
 });
