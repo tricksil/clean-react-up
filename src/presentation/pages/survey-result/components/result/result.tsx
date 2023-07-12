@@ -18,7 +18,7 @@ const Result: React.FC<Props> = ({ surveyResult }: Props) => {
         <Calendar date={surveyResult.date} className={Styles.calendarWrap} />
         <h2 data-testid="question">{surveyResult.question}</h2>
       </hgroup>
-      <Flipper flipKey="answers">
+      <Flipper flipKey={surveyResult}>
         <ul data-testid="answers" className={Styles.answerList}>
           {surveyResult.answers.map((answer) => (
             <SurveyResultAnswer key={answer.answer} answer={answer} />
