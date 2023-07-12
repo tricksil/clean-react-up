@@ -8,6 +8,7 @@ import {
 } from '@/domain/test';
 import { AccessDeniedError, UnexpectedError } from '@/domain/errors';
 import { AccountModel } from '@/domain/models';
+import '@/presentation/test/mock-match-media';
 import { MemoryHistory, createMemoryHistory } from 'history';
 import { Router } from 'react-router-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
