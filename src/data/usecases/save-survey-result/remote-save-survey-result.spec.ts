@@ -1,0 +1,36 @@
+import { RemoteSaveSurveyResult } from '@/data/usecases';
+import { HttpStatusCode } from '@/data/protocols/http';
+import { HttpClientSpy, mockRemoteSurveyResultModel } from '@/data/test';
+import { faker } from '@faker-js/faker';
+
+type SutTypes = {
+  sut: RemoteSaveSurveyResult;
+  httpClientSpy: HttpClientSpy;
+};
+
+const makeSut = (url = faker.internet.url()): SutTypes => {
+  const httpClientSpy = new HttpClientSpy();
+  const sut = new RemoteSaveSurveyResult(url, httpClientSpy);
+  return {
+    httpClientSpy,
+    sut,
+  };
+};
+
+describe('RemoteSaveSurveyResult', () => {
+  test('Should call HttpClient with correct URL and method', async () => {
+    const url = faker.internet.url();
+    const { sut, httpClientSpy } = makeSut(url);
+    const httpResult = mockRemoteSurveyResultModel();
+    httpClientSpy.response = {
+      statusCode: HttpStatusCode.ok,
+      body: httpResult,
+    };
+    await sut.save({
+      answer: faker.word.words(),
+    });
+
+    expect(httpClientSpy.url).toBe(url);
+    expect(httpClientSpy.method).toBe('put');
+  });
+});
