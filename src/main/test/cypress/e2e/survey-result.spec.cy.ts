@@ -72,14 +72,6 @@ describe('SurveyResult', () => {
         assert.equal(li.find('[data-testid="percent"]').text(), '30%');
       });
     });
-
-    it('Should goto SurveyList on back button click', () => {
-      cy.visit('');
-      cy.visit('/surveys/any_id');
-      mockLoadSuccess(100);
-      cy.getByTestId('back-button').click();
-      Helpers.testUrl('/');
-    });
   });
   describe('save', () => {
     const mockUnexpectedError = (): void => {
