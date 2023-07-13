@@ -71,7 +71,7 @@ describe('SurveyResult', () => {
     it('Should goto SurveyList on back button click', () => {
       cy.visit('');
       cy.visit('/surveys/any_id');
-      mockLoadSuccess();
+      mockLoadSuccess(100);
       cy.getByTestId('back-button').click();
       Helpers.testUrl('/');
     });
@@ -79,6 +79,10 @@ describe('SurveyResult', () => {
   describe('save', () => {
     const mockUnexpectedError = (): void => {
       Http.mockServerError(path, 'PUT');
+    };
+
+    const mockAccessDeniedError = (): void => {
+      Http.mockForbiddenError(path, 'PUT');
     };
 
     beforeEach(() => {
@@ -97,6 +101,12 @@ describe('SurveyResult', () => {
         'contain.text',
         'Algo de errado aconteceu. Tente novamente em breve.'
       );
+    });
+
+    it('Should logout on AccessDeniedError', () => {
+      mockAccessDeniedError();
+      cy.get('li:nth-child(2)').click();
+      Helpers.testUrl('/login');
     });
   });
 });
