@@ -4,7 +4,12 @@ import * as Http from '../utils/http-mocks';
 const path = /surveys/;
 
 const mockLoadSuccess = (delay?: number): void => {
-  Http.mockOk({ url: path, method: 'GET', delay, fixture: 'survey-result' });
+  Http.mockOk({
+    url: path,
+    method: 'GET',
+    delay,
+    fixture: 'load-survey-result',
+  });
 };
 
 describe('SurveyResult', () => {
@@ -80,9 +85,16 @@ describe('SurveyResult', () => {
     const mockUnexpectedError = (): void => {
       Http.mockServerError(path, 'PUT');
     };
-
     const mockAccessDeniedError = (): void => {
       Http.mockForbiddenError(path, 'PUT');
+    };
+    const mockSuccess = (delay?: number): void => {
+      Http.mockOk({
+        url: path,
+        method: 'PUT',
+        delay,
+        fixture: 'save-survey-result',
+      });
     };
 
     beforeEach(() => {
@@ -107,6 +119,28 @@ describe('SurveyResult', () => {
       mockAccessDeniedError();
       cy.get('li:nth-child(2)').click();
       Helpers.testUrl('/login');
+    });
+
+    it('Should present survey items', () => {
+      mockSuccess(100);
+      cy.get('li:nth-child(2)').click();
+      cy.getByTestId('question').should('have.text', 'Qual o seu nome?');
+      cy.getByTestId('day').should('have.text', '13');
+      cy.getByTestId('month').should('have.text', 'jul');
+      cy.getByTestId('year').should('have.text', '2023');
+      cy.get('li:nth-child(1)').then((li) => {
+        assert.equal(li.find('[data-testid="answer"]').text(), 'other_answer');
+        assert.equal(
+          li.find('[data-testid="image"]').attr('src'),
+          'other_image'
+        );
+        assert.equal(li.find('[data-testid="percent"]').text(), '50%');
+      });
+      cy.get('li:nth-child(2)').then((li) => {
+        assert.equal(li.find('[data-testid="answer"]').text(), 'any_answer');
+        assert.notExists(li.find('[data-testid="image"]'));
+        assert.equal(li.find('[data-testid="percent"]').text(), '50%');
+      });
     });
   });
 });
