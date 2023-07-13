@@ -22,6 +22,10 @@ const externals = [
     module: 'react-router-dom',
     global: 'ReactRouterDOM',
   },
+  {
+    module: 'react-flip-toolkit',
+    global: 'ReactFlipToolkit',
+  },
 ];
 
 module.exports = merge(common, {
